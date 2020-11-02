@@ -5,6 +5,7 @@ const apiRoutes = require('./routes/apiRoutes');
 const userRoute = require('./routes/userRoute');
 
 const app = express();
+const path = require('path');
 
 mongoose.connect('mongodb+srv://NumaDek:OpenClassroom@cluster0.b29hq.mongodb.net/<dbname>?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connection to MongoDB succeeded.'))
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use('/api/auth', userRoute);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/sauces', apiRoutes);
 
 
