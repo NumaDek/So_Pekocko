@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\controllers",
+    "\\middleware",
+    "\\models",
+    "\\routes"
+  ],
+  "SelectedNode": "\\package.json",
+  "PreviewInSolutionExplorer": false
+}
