@@ -3,9 +3,15 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const apiRoutes = require('./routes/apiRoutes');
 const userRoute = require('./routes/userRoutes');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 const app = express();
 const path = require('path');
+
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 mongoose.connect('mongodb+srv://NumaDek:OpenClassroom@cluster0.b29hq.mongodb.net/<dbname>?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connection to MongoDB succeeded.'))
@@ -18,6 +24,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(helmet());
+app.use(mongoSanitize());
 app.use(bodyParser.json());
 
 app.use('/api/auth', userRoute);
