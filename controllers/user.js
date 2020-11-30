@@ -1,24 +1,33 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
+const CryptoJS = require('crypto-js');
 
 exports.signup = (req, res, next) => {
+    RegExpPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,}/;
+    if (RegExpPassword.test(req.body.password) == false)
+        return res.status(400).json({ messsage: 'This password isn\'t complex enough.' });
+    RegExpEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (RegExpEmail.test(req.body.email) == false)
+        return res.status(400).json({ messsage: 'This Email adress isn\'t correct.' });
+    var encryptedEmail = JSON.stringify(CryptoJS.SHA256('RANDOM_SECRET_NONCE' + req.body.email));
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
-            const user = new User({
-                userId: req.body.userId,
-                email: req.body.email,
-                password: hash
-            });
-            user.save()
-                .then(() => res.status(201).json({ messsage: 'User created.' }))
-                .catch(error => res.status(400).json({ error }));
+                const user = new User({
+                    userId: req.body.userId,
+                    email: encryptedEmail,
+                    password: hash
+                });
+                user.save()
+                    .then(() => res.status(201).json({ messsage: 'User created.' }))
+                    .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    var encryptedEmail = JSON.stringify(CryptoJS.SHA256('RANDOM_SECRET_NONCE' + req.body.email));
+    User.findOne({ email: encryptedEmail })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'User not found.' });
@@ -38,7 +47,6 @@ exports.login = (req, res, next) => {
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
-
         })
         .catch(error => res.status(500).json({ error }));
 };

@@ -13,7 +13,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-mongoose.connect('mongodb+srv://NumaDek:OpenClassroom@cluster0.b29hq.mongodb.net/<dbname>?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://so_pekocko_rw:atg6Ll0CAec859vp@cluster0.b29hq.mongodb.net/<dbname>?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connection to MongoDB succeeded.'))
     .catch(() => console.log('Connection to MongoDB failled.'));
 
